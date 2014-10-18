@@ -61,7 +61,7 @@ def analytics():
 def dev():
     require('app', provided_by=['getstrappo', 'api', 'analytics'])
 
-    env.env_name = 'strappo-ny'
+    env.env_name = '%s-ny' % env.appname
 
     env.user = 'app'
     env.hosts = ['192.241.139.130']
@@ -72,7 +72,7 @@ def dev():
 
     env.database_path = env.site_path + '/appdb.sqlite'
 
-    env.config = 'dev_config.py'
+    env.config = '%s_dev_config.py' % env.appname
 
     env.servername = '%s.dev.getstrappo.com' % env.subdomain
     env.site_url = 'http://%s%s' % (env.hosts[0], env.check_url)
@@ -82,7 +82,7 @@ def dev():
 def prod():
     require('app', provided_by=['getstrappo', 'api', 'analytics'])
 
-    env.env_name = 'strappo-am'
+    env.env_name = '%s-am' % env.appname
 
     env.user = 'app'
     env.hosts = ['188.226.177.93']
@@ -91,7 +91,7 @@ def prod():
     env.venv_path = '/srv/www/%s/venv' % env.appname
     env.repo_branch = 'production'
 
-    env.config = 'prod_config.py'
+    env.config = '%s_prod_config.py' % env.appname
 
     env.servername = '%s.getstrappo.com' % env.subdomain
     env.site_url = 'http://%s%s' % (env.hosts[0], env.check_url)
