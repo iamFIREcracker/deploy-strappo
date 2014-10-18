@@ -34,7 +34,7 @@ define nginx::gunicorn( $appname, $appport, $servername ) {
 }
 
 define nginx::uwsgi( $appname, $appport, $servername ) {
-  file { "/etc/nginx/sites-enabled/${appname}-gunicorn":
+  file { "/etc/nginx/sites-enabled/${appname}-uwsgi":
     ensure  => present,
     owner   => root,
     group   => root,
