@@ -26,12 +26,11 @@ env.puppet_modulepath = 'puppet/modules'
 
 
 @task
-def getstrappo():
+def www():
     env.app = True
     env.appname = 'getstrappo'
     env.appport = '8001'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/getstrappo'
-    env.subdomain = 'www'
     env.check_url = '/en'
     env.puppet_file = 'puppet/getstrappo.pp'
     env.bootstrap_steps = [
@@ -126,7 +125,9 @@ def dev():
 
     env.config = '%s_dev_config.py' % env.appname
 
-    env.servername = '%s.dev.getstrappo.com' % env.subdomain
+    env.servername = 'dev.getstrappo.com'
+    if 'subdomain' in env:
+        env.servername = '%s.%s' % (env.subdomain, env.servername)
     env.site_url = 'http://%s%s' % (env.hosts[0], env.check_url)
 
 
@@ -143,9 +144,13 @@ def prod():
     env.venv_path = '/srv/www/%s/venv' % env.appname
     env.repo_branch = 'production'
 
+    env.database_path = env.site_path + '/appdb.sqlite'
+
     env.config = '%s_prod_config.py' % env.appname
 
-    env.servername = '%s.getstrappo.com' % env.subdomain
+    env.servername = 'getstrappo.com'
+    if 'subdomain' in env:
+        env.servername = '%s.%s' % (env.subdomain, env.servername)
     env.site_url = 'http://%s%s' % (env.hosts[0], env.check_url)
 
 
