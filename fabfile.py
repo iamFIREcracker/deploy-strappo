@@ -21,12 +21,18 @@ from fabric.decorators import task
 from fabolous.fabolous import *
 
 
+env.puppet_modulepath = 'puppet/modules'
+
+
 @task
 def getstrappo():
     env.app = True
     env.appname = 'getstrappo'
     env.appport = '8001'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/getstrappo'
+    env.subdomain = 'www'
+    env.check_url = '/en'
+    env.puppet_file = 'puppet/getstrappo.pp'
 
 
 @task
@@ -35,6 +41,9 @@ def api():
     env.appname = 'strappo-api'
     env.appport = '8000'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-api'
+    env.subdomain = 'api'
+    env.check_url = '/1/info'
+    env.puppet_file = 'puppet/api.pp'
 
 
 @task
@@ -43,6 +52,9 @@ def analytics():
     env.appname = 'strappo-analytics'
     env.appport = '8002'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-analytics'
+    env.subdomain = 'analytics'
+    env.check_url = '?limit=1'
+    env.puppet_file = 'puppet/analytics.pp'
 
 
 @task
@@ -62,8 +74,8 @@ def dev():
 
     env.config = 'dev_config.py'
 
-    env.servername = 'api.dev.getstrappo.com'
-    env.site_url = 'http://%s/1/info' % env.hosts[0]
+    env.servername = '%s.dev.getstrappo.com' % env.subdomain
+    env.site_url = 'http://%s%s' % (env.hosts[0], env.check_url)
 
 
 @task
@@ -81,8 +93,8 @@ def prod():
 
     env.config = 'prod_config.py'
 
-    env.servername = 'api.getstrappo.com'
-    env.site_url = 'http://%s/1/info' % env.hosts[0]
+    env.servername = '%s.getstrappo.com' % env.subdomain
+    env.site_url = 'http://%s%s' % (env.hosts[0], env.check_url)
 
 
 @task
