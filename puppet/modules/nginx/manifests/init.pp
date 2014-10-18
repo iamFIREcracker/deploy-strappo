@@ -22,7 +22,7 @@ class nginx {
 }
 
 define nginx::gunicorn( $appname, $appport, $servername ) {
-  file { "/etc/nginx/sites-enabled/${appname}-gunicorn":
+  file { "/etc/nginx/sites-enabled/${appname}":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -34,7 +34,7 @@ define nginx::gunicorn( $appname, $appport, $servername ) {
 }
 
 define nginx::uwsgi( $appname, $appport, $servername ) {
-  file { "/etc/nginx/sites-enabled/${appname}-uwsgi":
+  file { "/etc/nginx/sites-enabled/${appname}":
     ensure  => present,
     owner   => root,
     group   => root,

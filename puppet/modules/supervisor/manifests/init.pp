@@ -8,7 +8,7 @@ class supervisor {
 }
 
 define supervisor::gunicorn( $appname, $user ) {
-  file { "/etc/supervisor/conf.d/${appname}-gunicorn.conf":
+  file { "/etc/supervisor/conf.d/${appname}.conf":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -20,7 +20,7 @@ define supervisor::gunicorn( $appname, $user ) {
 }
 
 define supervisor::uwsgi( $appname, $user ) {
-  file { "/etc/supervisor/conf.d/${appname}-uwsgi.conf":
+  file { "/etc/supervisor/conf.d/${appname}.conf":
     ensure  => present,
     owner   => root,
     group   => root,
