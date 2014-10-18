@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 
 import sys
 
@@ -33,6 +34,23 @@ def getstrappo():
     env.subdomain = 'www'
     env.check_url = '/en'
     env.puppet_file = 'puppet/getstrappo.pp'
+    env.bootstrap_steps = [
+        (cyan('Prerequisites...'), prerequisites),
+        (cyan('Cloning repo...'), rclone),
+        (cyan('Uploading config...'), cupload),
+        (cyan('Applying puppet manifest...'), papply),
+        (cyan('Creating venv...'), vcreate),
+        (cyan('Recreate i18n strings...'), i18nupdate),
+        (cyan('Restart...'), restart)
+    ]
+    env.update_steps = [
+        (cyan('Updating repo...'), rupdate),
+        (cyan('Uploading config...'), cupload),
+        (cyan('Applying puppet manifest...'), papply),
+        (cyan('Updating venv...'), vupdate),
+        (cyan('Recreate i18n strings...'), i18nupdate),
+        (cyan('Restart...'), restart)
+    ]
 
 
 @task
@@ -44,6 +62,25 @@ def api():
     env.subdomain = 'api'
     env.check_url = '/1/info'
     env.puppet_file = 'puppet/api.pp'
+    env.bootstrap_steps = [
+        (cyan('Prerequisites...'), prerequisites),
+        (cyan('Cloning repo...'), rclone),
+        (cyan('Uploading config...'), cupload),
+        (cyan('Applying puppet manifest...'), papply),
+        (cyan('Creating venv...'), vcreate),
+        (cyan('Initialize database...'), dbupdate),
+        (cyan('Recreate i18n strings...'), i18nupdate),
+        (cyan('Restart...'), restart)
+    ]
+    env.update_steps = [
+        (cyan('Updating repo...'), rupdate),
+        (cyan('Uploading config...'), cupload),
+        (cyan('Applying puppet manifest...'), papply),
+        (cyan('Updating venv...'), vupdate),
+        (cyan('Updating database...'), dbupdate),
+        (cyan('Recreate i18n strings...'), i18nupdate),
+        (cyan('Restart...'), restart)
+    ]
 
 
 @task
@@ -55,6 +92,21 @@ def analytics():
     env.subdomain = 'analytics'
     env.check_url = '?limit=1'
     env.puppet_file = 'puppet/analytics.pp'
+    env.bootstrap_steps = [
+        (cyan('Prerequisites...'), prerequisites),
+        (cyan('Cloning repo...'), rclone),
+        (cyan('Uploading config...'), cupload),
+        (cyan('Applying puppet manifest...'), papply),
+        (cyan('Creating venv...'), vcreate),
+        (cyan('Restart...'), restart)
+    ]
+    env.update_steps = [
+        (cyan('Updating repo...'), rupdate),
+        (cyan('Uploading config...'), cupload),
+        (cyan('Applying puppet manifest...'), papply),
+        (cyan('Updating venv...'), vupdate),
+        (cyan('Restart...'), restart)
+    ]
 
 
 @task
@@ -99,61 +151,25 @@ def prod():
 
 @task
 def bootstrap():
-    ''' Configure the app '''
-    print(cyan("Prerequisites..."))
-    prerequisites()
+    require('bootstrap_steps')
 
-    print(cyan("Cloning repo..."))
-    rclone()
-
-    print(cyan("Updating config..."))
-    cupload()
-
-    print(cyan("Applying puppet manifest..."))
-    papply()
-
-    print(cyan('Creating venv...'))
-    vcreate()
-
-    print(cyan('Initialize database...'))
-    dbupdate()
-
-    print(cyan('Recreate i18n strings...'))
-    i18nupdate()
-
-    restart()
+    for (msg, step) in env.bootstrap_steps:
+        print(msg)
+        step()
 
 
 @task
 def update():
-    ''' Update everything related to the app. '''
-    print(cyan("Updating repo..."))
-    rupdate()
+    require('update_steps')
 
-    print(cyan("Updating config..."))
-    cupload()
-
-    print(cyan("Applying puppet manifest..."))
-    papply()
-
-    print(cyan('Updating venv...'))
-    vupdate()
-
-    print(cyan('Updating database...'))
-    dbupdate()
-
-    print(cyan('Recreate i18n strings...'))
-    i18nupdate()
-
-    restart()
+    for (msg, step) in env.update_steps:
+        print(msg)
+        step()
 
 
 @task
 def restart():
     ''' Restart the app.  Usable from other commands or from the CLI.'''
-    print(cyan("Restarting nginx..."))
-    sdo("service nginx restart")
-
     print(cyan("Restarting supervisor..."))
     # XXX Issuing a 'service supervisor restart' will produce an error!!!
     sdo("service supervisor stop && sleep 5 && service supervisor start")
@@ -172,4 +188,4 @@ def pull_database():
         env.database_path,
         '.'
     )
-    print local(rsync_command, capture=False)
+    local(rsync_command, capture=False)
