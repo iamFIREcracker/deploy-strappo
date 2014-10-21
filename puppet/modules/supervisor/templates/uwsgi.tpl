@@ -1,4 +1,4 @@
-[program:<%= @appname %>-uwsgi]
+[program:<%= @appname %>]
 command=/srv/www/<%= @appname %>/venv/bin/gunicorn -c /srv/www/<%= @appname %>/uwsgi.ini
 directory=/srv/www/<%= @appname %>
 user=<%= @user %>
