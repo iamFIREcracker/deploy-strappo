@@ -89,7 +89,7 @@ def analytics():
     env.appport = '8002'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-analytics'
     env.subdomain = 'analytics'
-    env.check_url = '?limit=1'
+    env.check_url = '/login'
     env.puppet_file = 'puppet/analytics.pp'
     env.bootstrap_steps = [
         (cyan('Prerequisites...'), prerequisites),
