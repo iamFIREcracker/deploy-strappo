@@ -115,7 +115,7 @@ def dev():
     env.env_name = '%s-ny' % env.appname
 
     env.user = 'app'
-    env.hosts = ['192.241.139.130']
+    env.hosts = ['178.62.103.185']
 
     env.site_path = '/srv/www/%s' % env.appname
     env.venv_path = '/srv/www/%s/venv' % env.appname
