@@ -26,13 +26,37 @@ env.puppet_modulepath = 'puppet/modules'
 
 
 @task
+def dev():
+    env.type = 'dev'
+
+    env.user = 'app'
+    env.hosts = ['178.62.103.185']
+
+
+@task
+def prod():
+    env.type = 'prod'
+
+    env.user = 'app'
+    env.hosts = ['188.226.177.93']
+
+
+@task
 def www():
-    env.app = True
     env.appname = 'getstrappo'
     env.appport = '8001'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/getstrappo'
-    env.check_url = '/en'
-    env.puppet_file = 'puppet/getstrappo.pp'
+    env.site_path = '/srv/www/%s' % env.appname
+    env.venv_path = '/srv/www/%s/venv' % env.appname
+    env.config = '%s_%s_config.py' % (env.appname, env.type)
+    if env.type == 'dev':
+        env.repo_branch = 'develop'
+        env.servername = 'dev.getstrappo.com'
+    elif env.type == 'prod':
+        env.repo_branch = 'production'
+        env.servername = 'getstrappo.com'
+    env.site_url = 'http://%s/en' % env.hosts[0]
+    env.puppet_file = 'puppet/%s.pp' % env.appname
     env.bootstrap_steps = [
         (cyan('Prerequisites...'), prerequisites),
         (cyan('Cloning repo...'), rclone),
@@ -54,13 +78,21 @@ def www():
 
 @task
 def api():
-    env.app = True
     env.appname = 'strappo-api'
     env.appport = '8000'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-api'
-    env.subdomain = 'api'
-    env.check_url = '/1/info'
-    env.puppet_file = 'puppet/api.pp'
+    env.site_path = '/srv/www/%s' % env.appname
+    env.venv_path = '/srv/www/%s/venv' % env.appname
+    env.config = '%s_%s_config.py' % (env.appname, env.type)
+    if env.type == 'dev':
+        env.repo_branch = 'develop'
+        env.servername = 'devapi.getstrappo.com'
+    elif env.type == 'prod':
+        env.repo_branch = 'production'
+        env.servername = 'api.getstrappo.com'
+    env.site_url = 'http://%s/1/info' % env.hosts[0]
+    env.puppet_file = 'puppet/%s.pp' % env.appname
+    env.database_path = env.site_path + '/appdb.sqlite'
     env.bootstrap_steps = [
         (cyan('Prerequisites...'), prerequisites),
         (cyan('Cloning repo...'), rclone),
@@ -84,13 +116,20 @@ def api():
 
 @task
 def analytics():
-    env.app = True
-    env.appname = 'strappo-analytics'
+    env.appname = 'strappo-api'
     env.appport = '8002'
-    env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-analytics'
-    env.subdomain = 'analytics'
-    env.check_url = '/login'
-    env.puppet_file = 'puppet/analytics.pp'
+    env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-api'
+    env.site_path = '/srv/www/%s' % env.appname
+    env.venv_path = '/srv/www/%s/venv' % env.appname
+    env.config = '%s_%s_config.py' % (env.appname, env.type)
+    if env.type == 'dev':
+        env.repo_branch = 'develop'
+        env.servername = 'devanalytics.getstrappo.com'
+    elif env.type == 'prod':
+        env.repo_branch = 'production'
+        env.servername = 'analytics.getstrappo.com'
+    env.site_url = 'http://%s/login' % env.hosts[0]
+    env.puppet_file = 'puppet/%s.pp' % env.appname
     env.bootstrap_steps = [
         (cyan('Prerequisites...'), prerequisites),
         (cyan('Cloning repo...'), rclone),
@@ -106,52 +145,6 @@ def analytics():
         (cyan('Updating venv...'), vupdate),
         (cyan('Restart...'), restart)
     ]
-
-
-@task
-def dev():
-    require('app', provided_by=['getstrappo', 'api', 'analytics'])
-
-    env.env_name = '%s-ny' % env.appname
-
-    env.user = 'app'
-    env.hosts = ['178.62.103.185']
-
-    env.site_path = '/srv/www/%s' % env.appname
-    env.venv_path = '/srv/www/%s/venv' % env.appname
-    env.repo_branch = 'develop'
-
-    env.database_path = env.site_path + '/appdb.sqlite'
-
-    env.config = '%s_dev_config.py' % env.appname
-
-    env.servername = 'dev.getstrappo.com'
-    if 'subdomain' in env:
-        env.servername = '%s.%s' % (env.subdomain, env.servername)
-    env.site_url = 'http://%s%s' % (env.hosts[0], env.check_url)
-
-
-@task
-def prod():
-    require('app', provided_by=['getstrappo', 'api', 'analytics'])
-
-    env.env_name = '%s-am' % env.appname
-
-    env.user = 'app'
-    env.hosts = ['188.226.177.93']
-
-    env.site_path = '/srv/www/%s' % env.appname
-    env.venv_path = '/srv/www/%s/venv' % env.appname
-    env.repo_branch = 'production'
-
-    env.database_path = env.site_path + '/appdb.sqlite'
-
-    env.config = '%s_prod_config.py' % env.appname
-
-    env.servername = 'getstrappo.com'
-    if 'subdomain' in env:
-        env.servername = '%s.%s' % (env.subdomain, env.servername)
-    env.site_url = 'http://%s%s' % (env.hosts[0], env.check_url)
 
 
 @task
