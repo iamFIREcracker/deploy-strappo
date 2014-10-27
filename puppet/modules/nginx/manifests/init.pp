@@ -33,6 +33,19 @@ define nginx::gunicorn( $appname, $appport, $servername ) {
   }
 }
 
+define nginx::gunicornssl( $appname, $appport, $servername,
+                           $sslcert, $sslcertkey ) {
+  file { "/etc/nginx/sites-enabled/${appname}-ssl":
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '644',
+    content => template("nginx/gunicorn-ssl.tpl"),
+    require => Package[nginx],
+    notify  => Service[nginx],
+  }
+}
+
 define nginx::uwsgi( $appname, $appport, $servername ) {
   file { "/etc/nginx/sites-enabled/${appname}":
     ensure  => present,
