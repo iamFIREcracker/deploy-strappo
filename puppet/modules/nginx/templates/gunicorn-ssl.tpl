@@ -2,6 +2,11 @@ server {
     listen 443 ssl;
     server_name <%= @servername %>;
 
+    add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";
+
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 10s;
+
     ssl_certificate <%= @sslcert %>;
     ssl_certificate_key <%= @sslcertkey %>;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
