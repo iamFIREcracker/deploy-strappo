@@ -116,9 +116,9 @@ def api():
 
 @task
 def analytics():
-    env.appname = 'strappo-api'
+    env.appname = 'strappo-analytics'
     env.appport = '8002'
-    env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-api'
+    env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-analytics'
     env.site_path = '/srv/www/%s' % env.appname
     env.venv_path = '/srv/www/%s/venv' % env.appname
     env.config = '%s_%s_config.py' % (env.appname, env.type)
