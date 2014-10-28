@@ -51,7 +51,7 @@ def www():
     env.config = '%s_%s_config.py' % (env.appname, env.type)
     if env.type == 'dev':
         env.repo_branch = 'develop'
-        env.servername = 'dev.getstrappo.com'
+        env.servername = 'dev1.getstrappo.com'
     elif env.type == 'prod':
         env.repo_branch = 'production'
         env.servername = 'getstrappo.com'
@@ -86,7 +86,7 @@ def api():
     env.config = '%s_%s_config.py' % (env.appname, env.type)
     if env.type == 'dev':
         env.repo_branch = 'develop'
-        env.servername = 'devapi.getstrappo.com'
+        env.servername = 'devapi1.getstrappo.com'
     elif env.type == 'prod':
         env.repo_branch = 'production'
         env.servername = 'api.getstrappo.com'
@@ -124,7 +124,7 @@ def analytics():
     env.config = '%s_%s_config.py' % (env.appname, env.type)
     if env.type == 'dev':
         env.repo_branch = 'develop'
-        env.servername = 'devanalytics.getstrappo.com'
+        env.servername = 'devanalytics1.getstrappo.com'
     elif env.type == 'prod':
         env.repo_branch = 'production'
         env.servername = 'analytics.getstrappo.com'
