@@ -20,7 +20,6 @@ file {"/srv/ssl":
   group => 'www-data'
 }
 
-
 file {"/srv/ssl/$appname":
   ensure => 'directory',
   owner => 'www-data',
