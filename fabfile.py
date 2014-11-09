@@ -55,7 +55,7 @@ def www():
     elif env.type == 'prod':
         env.repo_branch = 'production'
         env.servername = 'getstrappo.com'
-    env.site_url = 'http://%s/en' % env.hosts[0]
+    env.site_url = 'https://%s/en' % env.hosts[0]
     env.puppet_file = 'puppet/%s.pp' % env.appname
     env.bootstrap_steps = [
         (cyan('Prerequisites...'), prerequisites),
@@ -90,7 +90,7 @@ def api():
     elif env.type == 'prod':
         env.repo_branch = 'production'
         env.servername = 'api.getstrappo.com'
-    env.site_url = 'http://%s/1/info' % env.hosts[0]
+    env.site_url = 'https://%s/1/info' % env.hosts[0]
     env.puppet_file = 'puppet/%s.pp' % env.appname
     env.database_path = env.site_path + '/appdb.sqlite'
     env.bootstrap_steps = [
@@ -128,7 +128,7 @@ def analytics():
     elif env.type == 'prod':
         env.repo_branch = 'production'
         env.servername = 'analytics.getstrappo.com'
-    env.site_url = 'http://%s/login' % env.hosts[0]
+    env.site_url = 'https://%s/login' % env.hosts[0]
     env.puppet_file = 'puppet/%s.pp' % env.appname
     env.bootstrap_steps = [
         (cyan('Prerequisites...'), prerequisites),
