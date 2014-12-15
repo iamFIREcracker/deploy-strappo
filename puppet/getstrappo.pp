@@ -43,7 +43,7 @@ file { "/srv/ssl/$appname/getstrappo.com.key":
   require => File["/srv/ssl/$appname"]
 }
 
-nginx::gunicorn {'nginx':
+nginx::redirectssl {'nginx':
   appname => $appname,
   appport => $appport,
   servername => $servername,
