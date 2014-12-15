@@ -21,6 +21,18 @@ class nginx {
   }
 }
 
+define nginx::redirectssl( $appname, $appport, $servername ) {
+  file { "/etc/nginx/sites-enabled/${appname}":
+    ensure  => present,
+    owner   => root,
+    group   => root,
+    mode    => '644',
+    content => template("nginx/redirect-ssl.tpl"),
+    require => Package[nginx],
+    notify  => Service[nginx],
+  }
+}
+
 define nginx::gunicorn( $appname, $appport, $servername ) {
   file { "/etc/nginx/sites-enabled/${appname}":
     ensure  => present,
