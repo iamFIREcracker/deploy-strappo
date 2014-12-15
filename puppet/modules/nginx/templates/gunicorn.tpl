@@ -1,7 +1,16 @@
 server {
-    listen 80;
     server_name <%= @servername %>;
-    server_tokens off;
 
-    return 301 https://$host$request_uri;
+    location /static/ {
+        alias /srv/www/<%= @appname %>/static/;
+        expires 30d;
+    }
+
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+
+        proxy_pass   http://<%= @appname %>;
+    }
 }
