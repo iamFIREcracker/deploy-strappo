@@ -26,8 +26,6 @@ def vagrant():
     env.port = config['Port']
     env.key_filename = config['IdentityFile']
 
-    print(env.user, env.hosts, env.port)
-
 
 @task
 def dev():
