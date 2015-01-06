@@ -3,20 +3,11 @@
 
 from __future__ import print_function
 
-import sys
-
-from fabric.api import hide
-from fabric.api import cd
 from fabric.api import env
 from fabric.api import local
-from fabric.api import put
-from fabric.api import run
 from fabric.api import require
-from fabric.api import settings
 from fabric.api import sudo
 from fabric.colors import cyan
-from fabric.colors import green
-from fabric.colors import red
 from fabric.decorators import task
 
 from fabolous.fabolous import *
