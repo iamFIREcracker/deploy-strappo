@@ -17,6 +17,19 @@ env.puppet_modulepath = 'puppet/modules'
 
 
 @task
+def vagrant():
+    config = dict(line.split()
+                  for line in local('vagrant ssh-config', capture=True)
+                  .splitlines())
+    env.user = config['User']
+    env.hosts = [config['HostName']]
+    env.port = config['Port']
+    env.key_filename = config['IdentityFile']
+
+    print(env.user, env.hosts, env.port)
+
+
+@task
 def dev():
     env.type = 'dev'
 
