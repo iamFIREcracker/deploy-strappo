@@ -241,9 +241,12 @@ def updateall():
         c()
         update()
 
+
+@task
+def checkall():
     for c in [getstrappo, api, analytics]:
         c()
-        update()
+        check()
 
 
 @task
