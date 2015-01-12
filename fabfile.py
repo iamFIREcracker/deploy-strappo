@@ -10,6 +10,7 @@ from fabric.api import sudo
 from fabric.decorators import task
 
 from fabolous.fabolous import check
+from fabolous.fabolous import ssh
 from fabolous.fabolous import papply as update
 
 
