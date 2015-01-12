@@ -1,5 +1,5 @@
 bind = "0.0.0.0:<%= @appport %>"
-chdir = "<%= @wd %>"
+chdir = "<%= @workdir %>"
 preload = True
 reload = True
 workers = 2
