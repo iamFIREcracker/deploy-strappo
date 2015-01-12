@@ -2,7 +2,7 @@ server {
     server_name <%= @servername %>;
 
     location /static/ {
-        alias /srv/www/<%= @appname %>/static/;
+        alias <%= @staticfiles %>;
         expires 30d;
     }
 
@@ -11,6 +11,6 @@ server {
         proxy_set_header Host $http_host;
         proxy_redirect off;
 
-        proxy_pass   http://<%= @appname %>;
+        proxy_pass   http://<%= @proxypass %>;
     }
 }

@@ -15,10 +15,7 @@ define supervisorctl( $appname ) {
   }
 }
 
-define supervisor::gunicorn( $appname, $user ) {
-  supervisorctl {"supervisorctl-$appname":
-    appname => $appname
-  }
+define supervisor::gunicorn( $appname, $gunicorn, $config, $use, $wd, $user ) {
   file { "/etc/supervisor/conf.d/${appname}.conf":
     ensure  => present,
     owner   => root,
@@ -26,7 +23,10 @@ define supervisor::gunicorn( $appname, $user ) {
     mode    => '644',
     content => template("supervisor/gunicorn.tpl"),
     require => Package[supervisor],
-    notify  => Supervisorctl["supervisorctl-$appname"]
+  }
+  supervisorctl {"supervisorctl-$appname":
+    appname => $appname,
+    require => File[ "/etc/supervisor/conf.d/${appname}.conf" ]
   }
 }
 
@@ -45,32 +45,32 @@ define supervisor::uwsgi( $appname, $user ) {
   }
 }
 
-define supervisor::celery( $appname, $user ) {
-  supervisorctl {"supervisorctl-$appname-celery":
-    appname => "$appname-celery"
-  }
-  file { "/etc/supervisor/conf.d/${appname}-celery.conf":
+define supervisor::celery( $appname, $celery, $app, $wd, $user ) {
+  file { "/etc/supervisor/conf.d/${appname}.conf":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '644',
     content => template("supervisor/celery.tpl"),
-    require => Package[supervisor],
-    notify  => Supervisorctl["supervisorctl-$appname-celery"]
+    require => Package[supervisor]
+  }
+  supervisorctl {"supervisorctl-$appname":
+    appname => $appname,
+    require => File[ "/etc/supervisor/conf.d/${appname}.conf" ]
   }
 }
 
-define supervisor::celerybeat( $appname, $user ) {
-  supervisorctl {"supervisorctl-$appname-celerybeat":
-    appname => "$appname-celerybeat"
-  }
-  file { "/etc/supervisor/conf.d/${appname}-celerybeat.conf":
+define supervisor::celerybeat( $appname, $celery, $app, $wd, $user ) {
+  file { "/etc/supervisor/conf.d/${appname}.conf":
     ensure  => present,
     owner   => root,
     group   => root,
     mode    => '644',
     content => template("supervisor/celerybeat.tpl"),
-    require => Package[supervisor],
-    notify  => Supervisorctl["supervisorctl-$appname-celerybeat"]
+    require => Package[supervisor]
+  }
+  supervisorctl {"supervisorctl-$appname":
+    appname => $appname,
+    require => File[ "/etc/supervisor/conf.d/${appname}.conf" ]
   }
 }

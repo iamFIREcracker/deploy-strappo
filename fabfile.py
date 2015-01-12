@@ -7,10 +7,10 @@ from fabric.api import env
 from fabric.api import local
 from fabric.api import require
 from fabric.api import sudo
-from fabric.colors import cyan
 from fabric.decorators import task
 
-from fabolous.fabolous import *
+from fabolous.fabolous import check
+from fabolous.fabolous import papply as update
 
 
 env.puppet_modulepath = 'puppet/modules'
@@ -18,6 +18,7 @@ env.puppet_modulepath = 'puppet/modules'
 
 @task
 def vagrant():
+    env.type = 'vagrant'
     config = dict(line.split()
                   for line in local('vagrant ssh-config', capture=True)
                   .splitlines())
@@ -30,7 +31,6 @@ def vagrant():
 @task
 def dev():
     env.type = 'dev'
-
     env.user = 'app'
     env.hosts = ['178.62.103.185']
 
@@ -38,141 +38,211 @@ def dev():
 @task
 def prod():
     env.type = 'prod'
-
     env.user = 'app'
     env.hosts = ['188.226.177.93']
 
 
 @task
-def www():
+def database():
+    env.databasepath = '/srv/www/strappo-api/appdb.sqlite'
+    env.puppet_file = 'puppet/database.pp'
+    env.puppet_env = ' '.join([
+        'FACTER_USER=%s' % env.user,
+        'FACTER_DATABASEPATH=%s' % env.databasepath,
+    ])
+    env.check_command = 'ls %s' % env.databasepath
+
+
+@task
+def redis():
+    env.redisaddress = '127.0.0.1'
+    env.redisport = 6379
+    env.puppet_file = 'puppet/redis.pp'
+    env.puppet_env = ' '.join([
+        'FACTER_REDISADDRESS=%s' % env.redisaddress,
+        'FACTER_REDISPORT=%s' % env.redisport,
+    ])
+    env.check_command = 'pgrep redis'
+
+
+@task
+def nginx():
+    env.sslcert = 'getstrappo.com.combined.crt'
+    env.sslcertkey = 'getstrappo.com.key'
+    if env.type in ['vagrant', 'dev']:
+        env.getstrappo_servername = 'dev1.getstrappo.com'
+        env.api_servername = 'devapi1.getstrappo.com'
+        env.analytics_servername = 'devanalytics1.getstrappo.com'
+    elif env.type == 'prod':
+        env.getstrappo_servername = 'getstrappo.com'
+        env.api_servername = 'api.getstrappo.com'
+        env.analytics_servername = 'analytics.getstrappo.com'
+    env.getstrappo_appport = '8001'
+    env.getstrappo_staticfiles = '/srv/www/getstrappo/static'
+    env.api_appport = '8000'
+    env.api_staticfiles = '/srv/www/strappo-api/static'
+    env.analytics_appport = '8002'
+    env.analytics_staticfiles = '/srv/www/strappo-analytics/static'
+    env.puppet_file = 'puppet/nginx.pp'
+    env.puppet_env = ' '.join([
+        'FACTER_USER=%s' % env.user,
+        'FACTER_SSLCERT=%s' % env.sslcert,
+        'FACTER_SSLCERTKEY=%s' % env.sslcertkey,
+        'FACTER_GETSTRAPPO_SERVERNAME=%s' % env.getstrappo_servername,
+        'FACTER_GETSTRAPPO_APPPORT=%s' % env.getstrappo_appport,
+        'FACTER_GETSTRAPPO_STATICFILES=%s' % env.getstrappo_staticfiles,
+        'FACTER_API_SERVERNAME=%s' % env.api_servername,
+        'FACTER_API_APPPORT=%s' % env.api_appport,
+        'FACTER_API_STATICFILES=%s' % env.api_staticfiles,
+        'FACTER_ANALYTICS_SERVERNAME=%s' % env.analytics_servername,
+        'FACTER_ANALYTICS_APPPORT=%s' % env.analytics_appport,
+        'FACTER_ANALYTICS_STATICFILES=%s' % env.analytics_staticfiles,
+    ])
+    env.check_command = 'pgrep nginx'
+
+
+@task
+def getstrappo():
+    env.workdir = '/srv/www/getstrappo'
+    env.venvdir = '/srv/www/getstrappo/venv'
     env.appname = 'getstrappo'
     env.appport = '8001'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/getstrappo'
-    env.site_path = '/srv/www/%s' % env.appname
-    env.venv_path = '/srv/www/%s/venv' % env.appname
-    env.config = '%s_%s_config.py' % (env.appname, env.type)
-    if env.type == 'dev':
+    if env.type in ['vagrant', 'dev']:
         env.repo_branch = 'develop'
+        env.localconfig = 'getstrappo_dev_local_config.py.tpl'
+        env.gunicornconf = 'strappo-analytics_dev_gunicorn.conf.py.tpl'
         env.servername = 'dev1.getstrappo.com'
     elif env.type == 'prod':
         env.repo_branch = 'production'
+        env.localconfig = 'getstrappo_prod_local_config.py.tpl'
+        env.gunicornconf = 'strappo-analytics_prod_gunicorn.conf.py.tpl'
         env.servername = 'getstrappo.com'
-    env.site_url = 'https://%s/en' % env.hosts[0]
-    env.puppet_file = 'puppet/%s.pp' % env.appname
-    env.bootstrap_steps = [
-        (cyan('Prerequisites...'), prerequisites),
-        (cyan('Cloning repo...'), rclone),
-        (cyan('Uploading config...'), cupload),
-        (cyan('Applying puppet manifest...'), papply),
-        (cyan('Creating venv...'), vcreate),
-        (cyan('Recreate i18n strings...'), i18nupdate),
-        (cyan('Restart...'), restart)
-    ]
-    env.update_steps = [
-        (cyan('Updating repo...'), rupdate),
-        (cyan('Uploading config...'), cupload),
-        (cyan('Applying puppet manifest...'), papply),
-        (cyan('Updating venv...'), vupdate),
-        (cyan('Recreate i18n strings...'), i18nupdate),
-        (cyan('Restart...'), restart)
-    ]
+    env.redisaddress = '127.0.0.1'
+    env.redisport = 6379
+    env.puppet_file = 'puppet/getstrappo.pp'
+    env.puppet_env = ' '.join([
+        'FACTER_WORKDIR=%s' % env.workdir,
+        'FACTER_VENVDIR=%s' % env.venvdir,
+        'FACTER_APPNAME=%s' % env.appname,
+        'FACTER_APPPORT=%s' % env.appport,
+        'FACTER_USER=%s' % env.user,
+        'FACTER_REPO_URL=%s' % env.repo_url,
+        'FACTER_REPO_BRANCH=%s' % env.repo_branch,
+        'FACTER_LOCALCONFIG=%s' % env.localconfig,
+        'FACTER_REDISADDRESS=%s' % env.redisaddress,
+        'FACTER_REDISPORT=%s' % env.redisport,
+        'FACTER_GUNICORNCONF=%s' % env.gunicornconf,
+    ])
+    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"' %
+                         (env.servername, 'https://%s/en' % env.hosts[0]))
 
 
 @task
 def api():
+    env.workdir = '/srv/www/strappo-api'
+    env.venvdir = '/srv/www/strappo-api/venv'
     env.appname = 'strappo-api'
     env.appport = '8000'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-api'
-    env.site_path = '/srv/www/%s' % env.appname
-    env.venv_path = '/srv/www/%s/venv' % env.appname
-    env.config = '%s_%s_config.py' % (env.appname, env.type)
-    if env.type == 'dev':
+    if env.type in ['vagrant', 'dev']:
         env.repo_branch = 'develop'
+        env.localconfig = 'strappo-api_dev_local_config.py.tpl'
+        env.localceleryconfig = 'strappo-api_dev_local_celeryconfig.py.tpl'
+        env.gunicornconf = 'strappo-api_dev_gunicorn.conf.py.tpl'
         env.servername = 'devapi1.getstrappo.com'
     elif env.type == 'prod':
         env.repo_branch = 'production'
+        env.localconfig = 'strappo-api_prod_local_config.py.tpl'
+        env.localceleryconfig = 'strappo-api_prod_local_celeryconfig.py.tpl'
+        env.gunicornconf = 'strappo-api_prod_gunicorn.conf.py.tpl'
         env.servername = 'api.getstrappo.com'
-    env.site_url = 'https://%s/1/info' % env.hosts[0]
-    env.puppet_file = 'puppet/%s.pp' % env.appname
-    env.database_path = env.site_path + '/appdb.sqlite'
-    env.bootstrap_steps = [
-        (cyan('Prerequisites...'), prerequisites),
-        (cyan('Cloning repo...'), rclone),
-        (cyan('Uploading config...'), cupload),
-        (cyan('Applying puppet manifest...'), papply),
-        (cyan('Creating venv...'), vcreate),
-        (cyan('Initialize database...'), dbupdate),
-        (cyan('Recreate i18n strings...'), i18nupdate),
-        (cyan('Restart...'), restart)
-    ]
-    env.update_steps = [
-        (cyan('Updating repo...'), rupdate),
-        (cyan('Uploading config...'), cupload),
-        (cyan('Applying puppet manifest...'), papply),
-        (cyan('Updating venv...'), vupdate),
-        (cyan('Updating database...'), dbupdate),
-        (cyan('Recreate i18n strings...'), i18nupdate),
-        (cyan('Restart...'), restart)
-    ]
+    env.databaseurl = 'sqlite:////srv/www/strappo-api/appdb.sqlite'
+    env.redisaddress = '127.0.0.1'
+    env.redisport = 6379
+    env.celerybrokerurl = 'redis://127.0.0.1:6379/0'
+    env.celeryresultbackend = 'redis://127.0.0.1:6379/0'
+    env.puppet_file = 'puppet/strappo-api.pp'
+    env.puppet_env = ' '.join([
+        'FACTER_WORKDIR=%s' % env.workdir,
+        'FACTER_VENVDIR=%s' % env.venvdir,
+        'FACTER_APPNAME=%s' % env.appname,
+        'FACTER_APPPORT=%s' % env.appport,
+        'FACTER_USER=%s' % env.user,
+        'FACTER_REPO_URL=%s' % env.repo_url,
+        'FACTER_REPO_BRANCH=%s' % env.repo_branch,
+        'FACTER_LOCALCONFIG=%s' % env.localconfig,
+        'FACTER_DATABASEURL=%s' % env.databaseurl,
+        'FACTER_REDISADDRESS=%s' % env.redisaddress,
+        'FACTER_REDISPORT=%s' % env.redisport,
+        'FACTER_LOCALCELERYCONFIG=%s' % env.localceleryconfig,
+        'FACTER_CELERYBROKERURL=%s' % env.celerybrokerurl,
+        'FACTER_CELERYRESULTBACKEND=%s' % env.celeryresultbackend,
+        'FACTER_GUNICORNCONF=%s' % env.gunicornconf,
+    ])
+    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"' %
+                         (env.servername, 'https://%s/1/info' % env.hosts[0]))
 
 
 @task
 def analytics():
+    env.workdir = '/srv/www/strappo-analytics'
+    env.venvdir = '/srv/www/strappo-analytics/venv'
     env.appname = 'strappo-analytics'
     env.appport = '8002'
     env.repo_url = 'ssh://hg@bitbucket.org/iamFIREcracker/strappo-analytics'
-    env.site_path = '/srv/www/%s' % env.appname
-    env.venv_path = '/srv/www/%s/venv' % env.appname
-    env.config = '%s_%s_config.py' % (env.appname, env.type)
-    if env.type == 'dev':
+    if env.type in ['vagrant', 'dev']:
         env.repo_branch = 'develop'
+        env.localconfig = 'strappo-analytics_dev_local_config.py.tpl'
+        env.gunicornconf = 'strappo-analytics_dev_gunicorn.conf.py.tpl'
         env.servername = 'devanalytics1.getstrappo.com'
     elif env.type == 'prod':
         env.repo_branch = 'production'
+        env.localconfig = 'strappo-analytics_prod_local_config.py.tpl'
+        env.gunicornconf = 'strappo-analytics_prod_gunicorn.conf.py.tpl'
         env.servername = 'analytics.getstrappo.com'
-    env.site_url = 'https://%s/login' % env.hosts[0]
-    env.puppet_file = 'puppet/%s.pp' % env.appname
-    env.bootstrap_steps = [
-        (cyan('Prerequisites...'), prerequisites),
-        (cyan('Cloning repo...'), rclone),
-        (cyan('Uploading config...'), cupload),
-        (cyan('Applying puppet manifest...'), papply),
-        (cyan('Creating venv...'), vcreate),
-        (cyan('Restart...'), restart)
-    ]
-    env.update_steps = [
-        (cyan('Updating repo...'), rupdate),
-        (cyan('Uploading config...'), cupload),
-        (cyan('Applying puppet manifest...'), papply),
-        (cyan('Updating venv...'), vupdate),
-        (cyan('Restart...'), restart)
-    ]
+    env.databaseurl = 'sqlite:////srv/www/strappo-api/appdb.sqlite'
+    env.puppet_file = 'puppet/strappo-analytics.pp'
+    env.puppet_env = ' '.join([
+        'FACTER_WORKDIR=%s' % env.workdir,
+        'FACTER_VENVDIR=%s' % env.venvdir,
+        'FACTER_APPNAME=%s' % env.appname,
+        'FACTER_APPPORT=%s' % env.appport,
+        'FACTER_USER=%s' % env.user,
+        'FACTER_REPO_URL=%s' % env.repo_url,
+        'FACTER_REPO_BRANCH=%s' % env.repo_branch,
+        'FACTER_LOCALCONFIG=%s' % env.localconfig,
+        'FACTER_DATABASEURL=%s' % env.databaseurl,
+        'FACTER_GUNICORNCONF=%s' % env.gunicornconf,
+    ])
+    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"' %
+                         (env.servername, 'https://%s/login' % env.hosts[0]))
 
 
 @task
 def bootstrap():
-    require('bootstrap_steps')
+    for c in [database, redis, nginx]:
+        c()
+        update()
 
-    for (msg, step) in env.bootstrap_steps:
-        print(msg)
-        step()
+    for c in [getstrappo, api, analytics]:
+        c()
+        update()
 
-
-@task
-def update():
-    require('update_steps')
-
-    for (msg, step) in env.update_steps:
-        print(msg)
-        step()
+    for c in [getstrappo, api, analytics]:
+        c()
+        check()
 
 
 @task
-def restart():
-    ''' Restart the app.  Usable from other commands or from the CLI.'''
-    print(cyan("Restarting supervisor..."))
-    # XXX Issuing a 'service supervisor restart' will produce an error!!!
-    sdo("service supervisor stop && sleep 5 && service supervisor start")
+def updateall():
+    for c in [getstrappo, api, analytics]:
+        c()
+        update()
+
+    for c in [getstrappo, api, analytics]:
+        c()
+        update()
 
 
 @task

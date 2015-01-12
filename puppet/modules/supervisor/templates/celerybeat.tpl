@@ -1,6 +1,6 @@
-[program:<%= @appname %>-celerybeat]
-command=/srv/www/<%= @appname %>/venv/bin/celery beat --app=app --loglevel=info --logfile=celerybeat.log
-directory=/srv/www/<%= @appname %>
+[program:<%= @appname %>]
+command=<%= @celery %> beat --app=<%= @app %>
+directory=<%= @wd %>
 user=<%= @user %>
 group=<%= @user %>
 autostart=true

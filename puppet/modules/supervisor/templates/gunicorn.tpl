@@ -1,6 +1,6 @@
 [program:<%= @appname %>]
-command=/srv/www/<%= @appname %>/venv/bin/gunicorn -c /srv/www/<%= @appname %>/gunicorn.conf.py run_wsgi:app
-directory=/srv/www/<%= @appname %>
+command=<%= @gunicorn %> -c <%= @config %> <%= @use %>
+directory=<%= @wd %>
 user=<%= @user %>
 group=<%= @user %>
 autostart=true

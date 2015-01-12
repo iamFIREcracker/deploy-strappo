@@ -1,4 +1,4 @@
-upstream <%= @appname %> {
+upstream <%= @sitename %> {
     # server unix:/tmp/gunicorn.sock fail_timeout=0;
     # For a TCP configuration:
     server 127.0.0.1:<%= @appport %> fail_timeout=0;
@@ -23,7 +23,7 @@ server {
     ssl_session_timeout 10m;
 
     location /static/ {
-        alias /srv/www/<%= @appname %>/static/;
+        alias <%= @staticfiles %>;
         expires 30d;
     }
 
@@ -34,6 +34,6 @@ server {
 
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        proxy_pass   http://<%= @appname %>;
+        proxy_pass   http://<%= @sitename %>;
     }
 }

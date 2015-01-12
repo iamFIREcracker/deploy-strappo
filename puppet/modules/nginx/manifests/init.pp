@@ -18,11 +18,12 @@ class nginx {
   }
   service { 'nginx':
     ensure => running,
+    require => Package[ 'nginx' ]
   }
 }
 
-define nginx::redirectssl( $appname, $appport, $servername ) {
-  file { "/etc/nginx/sites-enabled/${appname}":
+define nginx::redirectssl( $sitename, $servername ) {
+  file { "/etc/nginx/sites-enabled/${sitename}":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -32,9 +33,8 @@ define nginx::redirectssl( $appname, $appport, $servername ) {
     notify  => Service[nginx],
   }
 }
-
-define nginx::gunicorn( $appname, $appport, $servername ) {
-  file { "/etc/nginx/sites-enabled/${appname}":
+define nginx::proxy( $sitename, $servername, $staticfiles, $proxypass ) {
+  file { "/etc/nginx/sites-enabled/${sitename}":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -44,10 +44,8 @@ define nginx::gunicorn( $appname, $appport, $servername ) {
     notify  => Service[nginx],
   }
 }
-
-define nginx::gunicornssl( $appname, $appport, $servername,
-                           $sslcert, $sslcertkey ) {
-  file { "/etc/nginx/sites-enabled/${appname}-ssl":
+define nginx::gunicornssl( $sitename, $servername, $appport, $sslcert, $sslcertkey, $staticfiles ) {
+  file { "/etc/nginx/sites-enabled/${sitename}":
     ensure  => present,
     owner   => root,
     group   => root,
@@ -57,7 +55,6 @@ define nginx::gunicornssl( $appname, $appport, $servername,
     notify  => Service[nginx],
   }
 }
-
 define nginx::uwsgi( $appname, $appport, $servername ) {
   file { "/etc/nginx/sites-enabled/${appname}":
     ensure  => present,
