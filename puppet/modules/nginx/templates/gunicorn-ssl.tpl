@@ -22,7 +22,7 @@ server {
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
 
-    location /static/ {
+    location /static {
         alias <%= @staticfiles %>;
         expires 30d;
     }

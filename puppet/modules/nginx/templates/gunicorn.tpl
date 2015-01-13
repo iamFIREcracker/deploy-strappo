@@ -1,7 +1,7 @@
 server {
     server_name <%= @servername %>;
 
-    location /static/ {
+    location /static {
         alias <%= @staticfiles %>;
         expires 30d;
     }
