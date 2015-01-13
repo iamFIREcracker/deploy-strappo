@@ -11,14 +11,18 @@ define mercurial::sync( $url, $branch, $wd, $user ) {
     user => $user,
     require => Package[mercurial]
   }
-
+  exec { "revert $url":
+    cwd => $wd,
+    command => "hg revert .",
+    user => $user,
+    require => Exec["clone $url"]
+  }
   exec { "update $url":
     cwd => $wd,
     command => "hg pull -u",
     user => $user,
-    require => Exec["clone $url"]
+    require => Exec["revert $url"]
   }
-
   exec { "switch $url@$branch":
     cwd => $wd,
     command => "hg update $branch",
