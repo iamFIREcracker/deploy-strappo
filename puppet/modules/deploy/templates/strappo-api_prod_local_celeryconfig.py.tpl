@@ -1,4 +1,4 @@
-CELERYD_CONCURRENCY = 1
+CELERYD_CONCURRENCY = 3
 
 BROKER_URL = '<%= @celerybrokerurl %>'
 CELERY_RESULT_BACKEND = '<%= @celeryresultbackend %>'

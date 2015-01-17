@@ -2,7 +2,7 @@ bind = "0.0.0.0:<%= @appport %>"
 chdir = "<%= @workdir %>"
 preload = True
 reload = True
-workers = 2
+workers = 3
 worker_class = 'sync'
 timeout = 10
 max_requests = 1200
