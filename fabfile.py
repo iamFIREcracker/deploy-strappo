@@ -257,14 +257,14 @@ def bootstrap():
 
 @task
 def updateall():
-    for c in [getstrappo, api, analytics]:
+    for c in [getstrappoit, getstrappo, api, analytics]:
         c()
         update()
 
 
 @task
 def checkall():
-    for c in [getstrappo, api, analytics]:
+    for c in [getstrappoit, getstrappo, api, analytics]:
         c()
         check()
 
