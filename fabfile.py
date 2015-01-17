@@ -138,8 +138,6 @@ def getstrappo():
         env.localconfig = 'getstrappo_prod_local_config.py.tpl'
         env.gunicornconf = 'strappo-analytics_prod_gunicorn.conf.py.tpl'
         env.servername = 'getstrappo.com'
-    env.redisaddress = '127.0.0.1'
-    env.redisport = 6379
     env.puppet_file = 'puppet/getstrappo.pp'
     env.puppet_env = ' '.join([
         'FACTER_WORKDIR=%s' % env.workdir,
@@ -150,8 +148,6 @@ def getstrappo():
         'FACTER_REPO_URL=%s' % env.repo_url,
         'FACTER_REPO_BRANCH=%s' % env.repo_branch,
         'FACTER_LOCALCONFIG=%s' % env.localconfig,
-        'FACTER_REDISADDRESS=%s' % env.redisaddress,
-        'FACTER_REDISPORT=%s' % env.redisport,
         'FACTER_GUNICORNCONF=%s' % env.gunicornconf,
     ])
     env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"'

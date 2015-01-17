@@ -1,8 +1,5 @@
 import web
 
-web.config.REDIS_ADDRESS = '<%= @redisaddress %>'
-web.config.REDIS_PORT = <%= @redisport %>
-
 web.config.LOG_SMTP_SERVER = 'smtp.mailgun.org'
 web.config.LOG_SMTP_PORT = 587
 web.config.LOG_SMTP_USERNAME = 'postmaster@sandbox564a36facd7d4e36b6f92109835f80fb.mailgun.org'
