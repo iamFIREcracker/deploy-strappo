@@ -3,5 +3,5 @@ server {
     server_name <%= @servername %>;
     server_tokens off;
 
-    return 301 https://$host$request_uri;
+    return 301 https://<%= @redirecthost %>$request_uri;
 }

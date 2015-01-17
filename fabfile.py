@@ -71,10 +71,12 @@ def nginx():
     env.sslcert = 'getstrappo.com.combined.crt'
     env.sslcertkey = 'getstrappo.com.key'
     if env.type in ['vagrant', 'dev']:
+        env.getstrappoit_servername = 'dev1.getstrappo.it'
         env.getstrappo_servername = 'dev1.getstrappo.com'
         env.api_servername = 'devapi1.getstrappo.com'
         env.analytics_servername = 'devanalytics1.getstrappo.com'
     elif env.type == 'prod':
+        env.getstrappoit_servername = 'getstrappo.it'
         env.getstrappo_servername = 'getstrappo.com'
         env.api_servername = 'api.getstrappo.com'
         env.analytics_servername = 'analytics.getstrappo.com'
@@ -89,6 +91,7 @@ def nginx():
         'FACTER_USER=%s' % env.user,
         'FACTER_SSLCERT=%s' % env.sslcert,
         'FACTER_SSLCERTKEY=%s' % env.sslcertkey,
+        'FACTER_GETSTRAPPOIT_SERVERNAME=%s' % env.getstrappoit_servername,
         'FACTER_GETSTRAPPO_SERVERNAME=%s' % env.getstrappo_servername,
         'FACTER_GETSTRAPPO_APPPORT=%s' % env.getstrappo_appport,
         'FACTER_GETSTRAPPO_STATICFILES=%s' % env.getstrappo_staticfiles,
@@ -100,6 +103,20 @@ def nginx():
         'FACTER_ANALYTICS_STATICFILES=%s' % env.analytics_staticfiles,
     ])
     env.check_command = 'pgrep nginx'
+
+
+@task
+def getstrappoit():
+    if env.type in ['vagrant', 'dev']:
+        env.servername = 'dev1.getstrappo.it'
+    elif env.type == 'prod':
+        env.servername = 'getstrappo.it'
+    env.puppet_file = 'puppet/getstrappoit.pp'
+    env.puppet_env = ' '.join([
+    ])
+    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"'
+                         ' | grep getstrappo.com' %
+                         (env.servername, 'http://%s' % env.hosts[0]))
 
 
 @task

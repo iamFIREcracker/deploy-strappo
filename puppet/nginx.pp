@@ -28,6 +28,11 @@ file { "/srv/ssl/$sslcertkey":
   group => 'www-data',
   require => File[ "/srv/ssl" ]
 }
+nginx::redirectssl {"nginx-redirectssl getstrappoit":
+  sitename => "getstrappoit",
+  servername => $getstrappoit_servername,
+  redirecthost => $getstrappo_servername
+}
 nginx::redirectssl {"nginx-redirectssl getstrappo":
   sitename => "getstrappo",
   servername => $getstrappo_servername

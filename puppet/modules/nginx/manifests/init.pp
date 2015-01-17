@@ -22,7 +22,7 @@ class nginx {
   }
 }
 
-define nginx::redirectssl( $sitename, $servername ) {
+define nginx::redirectssl( $sitename, $servername,  $redirecthost = '$host' ) {
   file { "/etc/nginx/sites-enabled/${sitename}":
     ensure  => present,
     owner   => root,
