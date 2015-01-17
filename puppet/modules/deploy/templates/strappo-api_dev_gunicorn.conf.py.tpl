@@ -3,7 +3,7 @@ chdir = "<%= @workdir %>"
 preload = True
 reload = True
 workers = 2
-worker_class = 'gevent'
+worker_class = 'sync'
 timeout = 10
 max_requests = 1200
 loglevel = "INFO"
