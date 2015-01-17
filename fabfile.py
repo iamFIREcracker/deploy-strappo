@@ -10,8 +10,10 @@ from fabric.api import sudo
 from fabric.decorators import task
 
 from fabolous.fabolous import check
+from fabolous.fabolous import papply
+from fabolous.fabolous import pcleanup
+from fabolous.fabolous import pprepare
 from fabolous.fabolous import ssh
-from fabolous.fabolous import papply as update
 
 
 env.puppet_modulepath = 'puppet/modules'
@@ -244,11 +246,11 @@ def analytics():
 def bootstrap():
     for c in [database, redis, nginx]:
         c()
-        update()
+        papply()
 
     for c in [getstrappo, api, analytics]:
         c()
-        update()
+        papply()
 
     for c in [getstrappo, api, analytics]:
         c()
@@ -256,10 +258,23 @@ def bootstrap():
 
 
 @task
+def update():
+    try:
+        pprepare()
+        papply()
+    finally:
+        pcleanup()
+
+
+@task
 def updateall():
-    for c in [getstrappoit, getstrappo, api, analytics]:
-        c()
-        update()
+    try:
+        pprepare()
+        for c in [getstrappoit, getstrappo, api, analytics]:
+            c()
+            papply()
+    finally:
+        pcleanup()
 
 
 @task
