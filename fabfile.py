@@ -152,7 +152,8 @@ def getstrappo():
         'FACTER_REDISPORT=%s' % env.redisport,
         'FACTER_GUNICORNCONF=%s' % env.gunicornconf,
     ])
-    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"' %
+    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"'
+                         ' | grep "200 OK"' %
                          (env.servername, 'https://%s/en' % env.hosts[0]))
 
 
@@ -198,7 +199,8 @@ def api():
         'FACTER_CELERYRESULTBACKEND=%s' % env.celeryresultbackend,
         'FACTER_GUNICORNCONF=%s' % env.gunicornconf,
     ])
-    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"' %
+    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"'
+                         ' | grep "200 OK"' %
                          (env.servername, 'https://%s/1/info' % env.hosts[0]))
 
 
@@ -233,7 +235,8 @@ def analytics():
         'FACTER_DATABASEURL=%s' % env.databaseurl,
         'FACTER_GUNICORNCONF=%s' % env.gunicornconf,
     ])
-    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"' %
+    env.check_command = ('curl --silent --insecure -I -H "Host: %s" "%s"'
+                         ' | grep "200 OK"' %
                          (env.servername, 'https://%s/login' % env.hosts[0]))
 
 
