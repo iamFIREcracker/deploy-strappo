@@ -21,3 +21,46 @@ TITANIUM_KEY = 'kYnQ9GPVCYsCA27dBxb70yfv7wjZIQTQ'
 TITANIUM_LOGIN = 'notifications'
 TITANIUM_PASSWORD = 'notificationsisstrongenough'
 TITANIUM_NOTIFICATION_CHANNEL = 'dev_channel'
+
+web.config.APP_MIN_VERSION = '1.3.1'
+web.config.APP_SERVED_REGIONS = [
+    {
+        'name': 'Viareggio',
+        'center': {
+            'lat': 43.873676,
+            'lon': 10.248534
+        },
+        'radius': 10,
+        'hours': [
+            {
+                'day_of_week': 0,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 1,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 2,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 3,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 4,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 5,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 6,
+                'from': 0,
+                'to': 24
+            }
+        ]
+    }
+]
