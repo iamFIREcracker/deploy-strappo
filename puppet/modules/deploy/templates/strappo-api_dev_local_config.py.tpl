@@ -22,6 +22,8 @@ TITANIUM_LOGIN = 'notifications'
 TITANIUM_PASSWORD = 'notificationsisstrongenough'
 TITANIUM_NOTIFICATION_CHANNEL = 'dev_channel'
 
+EXPIRE_PASSENGERS_AFTER_MINUTES = 30
+
 web.config.APP_MIN_VERSION = '1.3.1'
 web.config.APP_SERVED_REGIONS = [
     {
