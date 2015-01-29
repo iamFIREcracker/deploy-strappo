@@ -2,6 +2,7 @@ include base
 include mercurial
 include virtualenv
 include supervisor
+include gettext
 
 
 Exec {
@@ -20,6 +21,12 @@ mercurial::sync {"hg-sync":
   wd => $workdir,
   user => $user,
   require => File[ $workdir ]
+}
+exec {'make-strings':
+  cwd => $workdir,
+  command => "./make_strings.sh",
+  user => $user,
+  require =>Mercurial::Sync[ 'hg-sync' ]
 }
 virtualenv::sync {"venv-sync":
   venvdir => $venvdir,
@@ -84,6 +91,7 @@ supervisor::gunicorn {"supervisor-gunicorn":
   wd => $workdir,
   user => $user,
   require => [
+    Exec['make-strings'],
     Exec['alembic-migrate'],
     Virtualenv::Install[ 'venv-install gunicorn' ],
     Virtualenv::Install[ 'venv-install gevent' ],
@@ -96,20 +104,22 @@ supervisor::celery {'supervisor-celery':
   wd => $workdir,
   user => $user,
   require => [
+    Exec['make-strings'],
     Exec['alembic-migrate'],
     Virtualenv::Install[ 'venv-install gunicorn' ],
     Virtualenv::Install[ 'venv-install gevent' ],
   ]
 }
-#supervisor::celerybeat {'supervisor-celerybeat':
-  #appname => "$appname-celerybeat",
-  #celery => "$venvdir/bin/celery",
-  #app => "app",
-  #wd => $workdir,
-  #user => $user,
-  #require => [
-    #Exec['alembic-migrate'],
-    #Virtualenv::Install[ 'venv-install gunicorn' ],
-    #Virtualenv::Install[ 'venv-install gevent' ],
-  #]
-#}
+supervisor::celerybeat {'supervisor-celerybeat':
+  appname => "$appname-celerybeat",
+  celery => "$venvdir/bin/celery",
+  app => "app",
+  wd => $workdir,
+  user => $user,
+  require => [
+    Exec['make-strings'],
+    Exec['alembic-migrate'],
+    Virtualenv::Install[ 'venv-install gunicorn' ],
+    Virtualenv::Install[ 'venv-install gevent' ],
+  ]
+}
