@@ -24,7 +24,7 @@ mercurial::sync {"hg-sync":
 }
 exec {'make-strings':
   cwd => $workdir,
-  command => "./make_strings.sh",
+  command => "$workdir/make_strings.sh",
   user => $user,
   require =>Mercurial::Sync[ 'hg-sync' ]
 }
