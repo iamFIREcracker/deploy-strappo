@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime as dt
 
 import web
 
@@ -17,7 +18,7 @@ web.config.LOG_SUBJECT = 'Internal Server Error on api.dev.getstrappo.com'
 
 DATABASE_URL = '<%= @databaseurl %>'
 
-TITANIUM_KEY = 'kYnQ9GPVCYsCA27dBxb70yfv7wjZIQTQ'
+TITANIUM_KEY = 'FYPIAZrgsdb7cNIbb2EYBLgLgYM7C7oG'
 TITANIUM_LOGIN = 'notifications'
 TITANIUM_PASSWORD = 'notificationsisstrongenough'
 TITANIUM_NOTIFICATION_CHANNEL = 'dev_channel'
@@ -64,5 +65,29 @@ web.config.APP_SERVED_REGIONS = [
                 'to': 24
             }
         ]
+    }
+]
+web.config.APP_POIS = [
+    {
+        'name': 'Strappo HQ',
+        'info': 'poi_info_location',
+        'image': 'https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xpf1/v/t1.0-9/10796_984715708212110_8041308266048094515_n.png?oh=2d1de9e3d924f0ce815ea078092250c8&oe=557968E5&__gda__=1434070286_39fba896c19edd5cecf76be35e30bf7e',
+        'latitude': 43.8679166,
+        'longitude': 10.24869382,
+        'visible': True,
+        'important_destination': True,
+        'starts': dt.strptime('2015-03-18T15:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
+        'ends': dt.strptime('2015-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
+    },
+    {
+        'name': 'EGG, bitch!',
+        'info': 'poi_info_event',
+        'image': 'https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/31605_374262762664769_333154806_n.jpg?oh=3635c549291ada4821c529224bf702a7&oe=5581570F&__gda__=1433745149_98e0021f423664f4ced730967384f1b3',
+        'latitude': 43.889217,
+        'longitude': 10.228662,
+        'visible': True,
+        'important_destination': True,
+        'starts': dt.strptime('2015-03-18T15:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
+        'ends': dt.strptime('2015-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
     }
 ]
