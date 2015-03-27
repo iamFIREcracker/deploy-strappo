@@ -283,14 +283,14 @@ def checkall():
 @task
 def pull_database():
     '''Copy the uploads from the site to your local machine.'''
-    require('database_path')
+    require('databasepath')
 
-    sudo('chmod -R a+r "%s"' % env.database_path)
+    sudo('chmod -R a+r "%s"' % env.databasepath)
 
     rsync_command = r"""rsync -av -e 'ssh -p %s' %s@%s:%s %s""" % (
         env.port,
         env.user, env.host,
-        env.database_path,
+        env.databasepath,
         '.'
     )
     local(rsync_command, capture=False)
