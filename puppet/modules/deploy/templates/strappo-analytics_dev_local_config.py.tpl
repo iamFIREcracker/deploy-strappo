@@ -15,8 +15,9 @@ web.config.LOG_SUBJECT = 'Internal Server Error on analytics.dev.getstrappo.com'
 DATABASE_URL = '<%= @databaseurl %>'
 
 SECRET = 'ohmygodlookatthetree'
+EGGSECRET = 'eggpartyforthewin'
 
-TITANIUM_KEY = 'kYnQ9GPVCYsCA27dBxb70yfv7wjZIQTQ'
+TITANIUM_KEY = 'FYPIAZrgsdb7cNIbb2EYBLgLgYM7C7oG'
 TITANIUM_LOGIN = 'notifications'
 TITANIUM_PASSWORD = 'notificationsisstrongenough'
 TITANIUM_NOTIFICATION_CHANNEL = 'dev_channel'
