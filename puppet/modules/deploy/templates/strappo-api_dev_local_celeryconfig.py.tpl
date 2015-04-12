@@ -9,7 +9,6 @@ CELERY_RESULT_BACKEND = '<%= @celeryresultbackend %>'
 CELERY_SEND_TASK_ERROR_EMAILS = True
 ADMINS = (
     ('Matteo Landi', 'matteo@matteolandi.net'),
-    ('Giovanni Bianchi', 'bianchigiova@gmail.com'),
 )
 SERVER_EMAIL = 'noreply@api.dev.getstrappo.com'
 EMAIL_HOST = 'smtp.mailgun.org'
