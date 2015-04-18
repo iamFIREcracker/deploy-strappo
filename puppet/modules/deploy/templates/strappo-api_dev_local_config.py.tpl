@@ -80,7 +80,7 @@ web.config.APP_POIS = [
         'visible': True,
         'important_destination': True,
         'starts': dt.strptime('2015-03-18T15:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
-        'ends': dt.strptime('2015-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
+        'ends': dt.strptime('2020-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
     },
     {
         'name': 'EGG, bitch!',
