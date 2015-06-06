@@ -73,12 +73,12 @@ def nginx():
     env.sslcert = 'getstrappo.com.combined.crt'
     env.sslcertkey = 'getstrappo.com.key'
     if env.type in ['vagrant', 'dev']:
-        env.getstrappoit_servername = 'dev1.getstrappo.it'
+        env.getstrappoit_servername = '.dev1.getstrappo.it'
         env.getstrappo_servername = 'dev1.getstrappo.com'
         env.api_servername = 'devapi1.getstrappo.com'
         env.analytics_servername = 'devanalytics1.getstrappo.com'
     elif env.type == 'prod':
-        env.getstrappoit_servername = 'getstrappo.it'
+        env.getstrappoit_servername = '.getstrappo.it'
         env.getstrappo_servername = 'getstrappo.com'
         env.api_servername = 'api.getstrappo.com'
         env.analytics_servername = 'analytics.getstrappo.com'
