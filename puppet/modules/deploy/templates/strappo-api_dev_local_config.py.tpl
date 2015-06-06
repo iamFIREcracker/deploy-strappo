@@ -18,7 +18,7 @@ web.config.LOG_SUBJECT = 'Internal Server Error on api.dev.getstrappo.com'
 
 DATABASE_URL = '<%= @databaseurl %>'
 
-TITANIUM_KEY = 'FYPIAZrgsdb7cNIbb2EYBLgLgYM7C7oG'
+TITANIUM_KEY = 'v7uTBJ7mpeVyxYgoGm1l5zme6u8hAbGe'
 TITANIUM_LOGIN = 'notifications'
 TITANIUM_PASSWORD = 'notificationsisstrongenough'
 TITANIUM_NOTIFICATION_CHANNEL = 'dev_channel'
