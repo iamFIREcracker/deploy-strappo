@@ -81,5 +81,16 @@ web.config.APP_POIS = [
         'important_destination': True,
         'starts': dt.strptime('2015-03-28T15:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
         'ends': dt.strptime('2015-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
+    },
+    {
+        'name': 'Bar Eden',
+        'info': 'poi_info_bar',
+        'image': 'https://scontent-mxp1-1.xx.fbcdn.net/hphotos-xap1/v/t1.0-9/995049_766482446745617_2838624800228983681_n.jpg?oh=b6657d15b52e193028132493c28a4245&oe=55F13C04',
+        'latitude': 43.866792,
+        'longitude': 10.243564,
+        'visible': True,
+        'important_destination': True,
+        'starts': dt.strptime('2015-03-18T15:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
+        'ends': dt.strptime('2020-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
     }
 ]

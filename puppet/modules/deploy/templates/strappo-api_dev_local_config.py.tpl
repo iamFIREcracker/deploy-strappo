@@ -25,7 +25,7 @@ TITANIUM_NOTIFICATION_CHANNEL = 'dev_channel'
 
 EXPIRE_PASSENGERS_AFTER_MINUTES = 30
 
-web.config.FACEBOOK_APP_SECRET = 'b68c00bc269042577917fa95ec97e7c4'
+web.config.FACEBOOK_APP_SECRET = '01c93ff9c0fc2e76b6b85a0b64454581'
 web.config.FACEBOOK_CACHE_EXPIRE_SECONDS = 60 * 60  # 1h
 
 web.config.APP_MIN_VERSION = '1.7.0'
@@ -92,5 +92,16 @@ web.config.APP_POIS = [
         'important_destination': True,
         'starts': dt.strptime('2015-03-18T15:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
         'ends': dt.strptime('2015-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
+    },
+    {
+        'name': 'Bar Eden',
+        'info': 'poi_info_bar',
+        'image': 'https://scontent-mxp1-1.xx.fbcdn.net/hphotos-xap1/v/t1.0-9/995049_766482446745617_2838624800228983681_n.jpg?oh=b6657d15b52e193028132493c28a4245&oe=55F13C04',
+        'latitude': 43.866792,
+        'longitude': 10.243564,
+        'visible': True,
+        'important_destination': True,
+        'starts': dt.strptime('2015-03-18T15:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
+        'ends': dt.strptime('2020-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
     }
 ]
