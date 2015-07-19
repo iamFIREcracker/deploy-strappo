@@ -110,17 +110,6 @@ web.config.APP_SERVED_REGIONS = [
 ]
 web.config.APP_POIS = [
     {
-        'name': 'EGG PARTY/OFF',
-        'info': 'poi_info_event',
-        'image': 'https://fbcdn-sphotos-a-a.akamaihd.net/hphotos-ak-xap1/v/t1.0-9/31605_374262762664769_333154806_n.jpg?oh=3635c549291ada4821c529224bf702a7&oe=5581570F&__gda__=1433745149_98e0021f423664f4ced730967384f1b3',
-        'latitude': 43.889217,
-        'longitude': 10.228662,
-        'visible': True,
-        'important_destination': True,
-        'starts': dt.strptime('2015-03-28T15:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
-        'ends': dt.strptime('2015-03-29T02:00:00Z', '%Y-%m-%dT%H:%M:%SZ'),
-    },
-    {
         'name': 'Bar Eden',
         'info': 'poi_info_bar',
         'image': 'https://scontent-mxp1-1.xx.fbcdn.net/hphotos-xap1/v/t1.0-9/995049_766482446745617_2838624800228983681_n.jpg?oh=b6657d15b52e193028132493c28a4245&oe=55F13C04',
