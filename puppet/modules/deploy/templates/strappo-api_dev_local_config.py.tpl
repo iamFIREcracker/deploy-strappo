@@ -28,7 +28,9 @@ EXPIRE_PASSENGERS_AFTER_MINUTES = 30
 web.config.FACEBOOK_APP_SECRET = '01c93ff9c0fc2e76b6b85a0b64454581'
 web.config.FACEBOOK_CACHE_EXPIRE_SECONDS = 60 * 60  # 1h
 
-web.config.APP_MIN_VERSION = '1.7.0'
+web.config.APP_MIN_VERSION_ANDROID = '1.12.0'
+web.config.APP_MIN_VERSION_IOS = '1.12.0'
+web.config.APP_MIN_VERSION = '1.12.0'
 web.config.APP_SERVED_REGIONS = [
     {
         'name': 'Viareggio',
