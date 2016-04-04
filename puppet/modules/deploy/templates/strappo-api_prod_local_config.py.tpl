@@ -108,6 +108,44 @@ web.config.APP_SERVED_REGIONS = [
                     'to': 24
             }
         ]
+    },{
+        'name': 'Ventimiglia',
+            'center': {
+                'lat': 43.791040,
+                'lon': 7.607895
+            },
+            'radius': 10,
+            'hours': [
+            {
+                'day_of_week': 0,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 1,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 2,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 3,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 4,
+                'from': 0,
+                'to': 24
+            }, {
+                'day_of_week': 5,
+                    'from': 0,
+                    'to': 24
+            }, {
+                'day_of_week': 6,
+                    'from': 0,
+                    'to': 24
+            }
+        ]
     }
 ]
 web.config.APP_POIS = [
